@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Career & Financial Action Plan (2025)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            border-bottom-color: #4f46e5;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .progress-bar-bg {
+            background-color: #e5e7eb;
+        }
+        .progress-bar-fill {
+            background-color: #4f46e5;
+            transition: width 0.5s ease-in-out;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .table-header {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+        .table-cell {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .status-todo { background-color: #fee2e2; color: #991b1b; }
+        .status-inprogress { background-color: #fef3c7; color: #92400e; }
+        .status-done { background-color: #dcfce7; color: #166534; }
+        .status-blocked { background-color: #e5e7eb; color: #4b5563; }
+        .status-pill {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+        input[type="checkbox"]:checked + span {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <header class="bg-gray-800 text-white p-6">
+            <h1 class="text-2xl md:text-3xl font-bold">Personalized Action Plan: 2025</h1>
+            <p class="text-gray-300 mt-1">Your interactive dashboard to track career, financial, and skill goals.</p>
+        </header>
+
+        <!-- Tabs Navigation -->
+        <div class="border-b border-gray-200 bg-gray-50">
+            <nav class="flex flex-wrap -mb-px px-4 md:px-8" id="tab-nav">
+                <button class="tab-button active text-sm md:text-base p-4 border-b-2 border-transparent" data-tab="dashboard">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                </button>
+                <button class="tab-button text-sm md:text-base p-4 border-b-2 border-transparent" data-tab="goals">
+                    <i class="fas fa-bullseye mr-2"></i>Goals
+                </button>
+                <button class="tab-button text-sm md:text-base p-4 border-b-2 border-transparent" data-tab="monthly-plan">
+                    <i class="fas fa-calendar-alt mr-2"></i>Monthly Plan
+                </button>
+                <button class="tab-button text-sm md:text-base p-4 border-b-2 border-transparent" data-tab="car-sale">
+                    <i class="fas fa-car mr-2"></i>Car Sale
+                </button>
+                <button class="tab-button text-sm md:text-base p-4 border-b-2 border-transparent" data-tab="finance">
+                    <i class="fas fa-piggy-bank mr-2"></i>Finance Tracker
+                </button>
+                <button class="tab-button text-sm md:text-base p-4 border-b-2 border-transparent" data-tab="job-search">
+                    <i class="fas fa-briefcase mr-2"></i>Job Search
+                </button>
+            </nav>
+        </div>
+
+        <!-- Tabs Content -->
+        <div class="p-4 md:p-8">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Dashboard Overview</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Progress Card -->
+                    <div class="card p-5">
+                        <h3 class="font-semibold text-gray-500">Overall Progress</h3>
+                        <div class="relative pt-1 mt-2">
+                            <div class="w-full progress-bar-bg rounded-full">
+                                <div id="overall-progress-bar" class="progress-bar-fill text-xs font-semibold text-indigo-100 text-center p-0.5 leading-none rounded-full" style="width: 0%"> 0% </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">Based on completed tasks.</p>
+                    </div>
+                    <!-- Financials Card -->
+                    <div class="card p-5">
+                        <h3 class="font-semibold text-gray-500">Emergency Fund</h3>
+                        <p class="text-3xl font-bold text-gray-800 mt-1">₹<span id="emergency-fund-current">0</span></p>
+                        <p class="text-sm text-green-600 font-medium">Target: ₹40,000</p>
+                    </div>
+                    <!-- Goals Card -->
+                    <div class="card p-5">
+                        <h3 class="font-semibold text-gray-500">Goals Status</h3>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-gray-700">Completed</span>
+                            <span id="goals-completed-count" class="font-bold text-green-600">0/12</span>
+                        </div>
+                         <div class="flex justify-between items-center mt-1">
+                            <span class="text-gray-700">In Progress</span>
+                            <span id="goals-inprogress-count" class="font-bold text-yellow-600">0/12</span>
+                        </div>
+                    </div>
+                    <!-- Countdown Card -->
+                    <div class="card p-5">
+                        <h3 class="font-semibold text-gray-500">Days Left in 2025</h3>
+                        <p id="countdown" class="text-3xl font-bold text-gray-800 mt-1">0</p>
+                        <p class="text-sm text-gray-500 mt-2">Let's make them count!</p>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Next 3 Critical Tasks</h3>
+                    <div id="critical-tasks" class="space-y-3">
+                        <!-- Critical tasks will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals Tab -->
+            <div id="goals" class="tab-content">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Goals for 2025</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white text-sm">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="p-3 text-left">Category</th>
+                                <th class="p-3 text-left">Goal</th>
+                                <th class="p-3 text-left">Target</th>
+                                <th class="p-3 text-left">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="goals-table-body">
+                            <!-- Goal rows will be populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Monthly Plan Tab -->
+            <div id="monthly-plan" class="tab-content">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Monthly Action Plan</h2>
+                <div class="space-y-8" id="monthly-plan-container">
+                    <!-- Monthly cards will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Car Sale Tab -->
+            <div id="car-sale" class="tab-content">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Car Sale Tracker & Checklist</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Financial Summary -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Financial Summary</h3>
+                        <div class="card p-6 space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Realistic Sale Price:</span>
+                                <span class="font-bold text-lg text-green-600">₹5,50,000</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Loan Payoff Required:</span>
+                                <span class="font-bold text-lg text-red-600">~₹4,02,450</span>
+                            </div>
+                            <hr/>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-800 font-semibold">✅ Net Cash in Hand:</span>
+                                <span class="font-bold text-2xl text-indigo-600">~₹1,47,550</span>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                             <h3 class="text-lg font-semibold mb-3">Foreclosure Request Email Template</h3>
+                             <div class="card p-4 text-sm bg-gray-50">
+                                <p><strong>To:</strong> customer.service@toyotafinance.co.in (or relevant email)</p>
+                                <p><strong>Subject:</strong> Loan Foreclosure Request - Loan Account No. [Your Loan Account Number]</p>
+                                <hr class="my-2">
+                                <p>Dear Toyota Financial Services Team,</p>
+                                <p class="mt-2">I am writing to request a foreclosure statement for my car loan with the account number [Your Loan Account Number]. The loan is for my Maruti Baleno Sigma, with vehicle registration number [Your Car's Reg. No.].</p>
+                                <p class="mt-2">Please provide the final foreclosure amount, including any applicable charges, and the detailed procedure for closing the loan. I intend to complete the payment at the earliest.</p>
+                                <p class="mt-2">Thank you for your prompt assistance.</p>
+                                <p class="mt-2">Sincerely,<br>Amit [Your Last Name]<br>[Your Phone Number]</p>
+                             </div>
+                        </div>
+                    </div>
+                    <!-- Checklist -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Sale Process Checklist</h3>
+                        <div class="space-y-3" id="car-sale-checklist">
+                            <!-- Checklist items will be populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Finance Tracker Tab -->
+            <div id="finance" class="tab-content">
+                 <h2 class="text-xl font-bold text-gray-800 mb-4">Loan & Investment Tracker</h2>
+                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Loan Repayment -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Loan Repayment Status</h3>
+                        <div class="card p-4">
+                            <table class="min-w-full text-sm">
+                                <thead class="table-header">
+                                    <tr>
+                                        <th class="p-3 text-left">Loan</th>
+                                        <th class="p-3 text-left">Principal</th>
+                                        <th class="p-3 text-left">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="loan-table-body">
+                                    <!-- Loan data will be populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Investment Tracker -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Investment Growth</h3>
+                        <div class="card p-6">
+                            <label for="emergency-fund-input" class="font-medium text-gray-700">Update Emergency Fund (₹)</label>
+                            <div class="flex items-center mt-2 gap-2">
+                                <input type="number" id="emergency-fund-input" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Enter current amount">
+                                <button id="update-fund-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Update</button>
+                            </div>
+                            <div class="mt-4">
+                                <h4 class="font-medium text-gray-700">SIP Planner</h4>
+                                <p class="text-sm text-gray-500 mt-1">Start with ₹1,000–₹2,000/month after car sale.</p>
+                                <div class="mt-2 space-y-2">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="sip-check" class="mr-2"><span class="text-gray-800">Started first SIP</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+            <!-- Job Search Tab -->
+            <div id="job-search" class="tab-content">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Job Application Tracker</h2>
+                <div class="card p-4 mb-6">
+                    <form id="add-application-form" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                        <div class="md:col-span-2">
+                            <label class="text-sm font-medium">Company</label>
+                            <input type="text" id="company-name" placeholder="e.g., Thoughtworks" class="w-full mt-1 p-2 border rounded-md" required>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="text-sm font-medium">Role</label>
+                            <input type="text" id="role-name" placeholder="e.g., Sr. QA Engineer" class="w-full mt-1 p-2 border rounded-md" required>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700">Add Application</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white text-sm">
+                        <thead class="table-header">
+                            <tr>
+                                <th class="p-3 text-left">Date</th>
+                                <th class="p-3 text-left">Company</th>
+                                <th class="p-3 text-left">Role</th>
+                                <th class="p-3 text-left">Status</th>
+                                <th class="p-3 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="job-application-body">
+                            <!-- Job applications will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- DATA ---
+            const goalsData = [
+                { category: '🚀 Career', goal: 'Switch to a higher-paying QA role', target: '₹7–10 LPA', status: 'To Do' },
+                { category: '🚀 Career', goal: 'Get shortlisted at Tier 1 / Product companies', target: '3-5 Interviews', status: 'To Do' },
+                { category: '🚀 Career', goal: 'Sharpen mobile, API, and performance testing', target: 'Project Completion', status: 'To Do' },
+                { category: '💰 Financial', goal: 'Close at least one major loan', target: 'Car Loan', status: 'In Progress' },
+                { category: '💰 Financial', goal: 'Grow emergency fund', target: '₹40,000+', status: 'To Do' },
+                { category: '💰 Financial', goal: 'Begin SIPs or investment planning', target: '₹1-2K/month', status: 'To Do' },
+                { category: '🧠 Skill', goal: 'Complete 1-2 certifications', target: 'ISTQB/API Cert', status: 'To Do' },
+                { category: '🧠 Skill', goal: 'Master Java for automation & explore Cypress/Playwright', target: 'GitHub Projects', status: 'To Do' },
+                { category: '🧠 Skill', goal: 'Build a public GitHub portfolio', target: '3+ Projects', status: 'To Do' },
+                { category: '💼 Job Search', goal: 'Apply smartly to MNCs/remote-first firms', target: 'Targeted Applications', status: 'To Do' },
+                { category: '💼 Job Search', goal: 'Build personalized cover letter + resume', target: '3 Templates', status: 'To Do' },
+                { category: '💼 Job Search', goal: 'Leverage LinkedIn & communities weekly', target: 'Active Participation', status: 'To Do' },
+            ];
+
+            const monthlyPlanData = [
+                { month: 'July 2025', theme: 'Reset & Rebuild Phase', tasks: [
+                    { text: 'Finalize decision on car sale', done: true },
+                    { text: 'Consolidate short-term loans or close the smallest one', done: false },
+                    { text: 'Create a budget envelope (EMIs, groceries, savings)', done: false },
+                    { text: 'Refine resume and start customizing cover letters', done: false },
+                    { text: 'Choose specialization: API testing or Mobile Automation', done: false },
+                    { text: 'Start free/paid course on chosen specialization', done: false },
+                ]},
+                { month: 'August 2025', theme: 'Learning + Preparation', tasks: [
+                    { text: 'Finish API or Appium mastery course', done: false },
+                    { text: 'Start building projects on GitHub (Functional, UI, API)', done: false },
+                    { text: 'Shortlist target companies (TCS, Thoughtworks, etc.)', done: false },
+                    { text: 'Update LinkedIn with new keywords', done: false },
+                    { text: 'Apply to 12–15 carefully selected job openings', done: false },
+                ]},
+                { month: 'September 2025', theme: 'Interview & Certifications', tasks: [
+                    { text: 'Start ISTQB Foundation or Advanced preparation', done: false },
+                    { text: 'Prepare answers for core QA topics', done: false },
+                    { text: 'Participate in mock interviews (Pramp, InterviewBuddy)', done: false },
+                    { text: 'Document 3–5 STAR-based interview stories', done: false },
+                ]},
+                { month: 'October 2025', theme: 'Applications & Networking Push', tasks: [
+                    { text: 'Apply to 20+ product/MNC openings', done: false },
+                    { text: 'Join peer QA communities (Telegram, Discord, etc.)', done: false },
+                    { text: 'Network on LinkedIn: share projects/summaries', done: false },
+                    { text: 'Start investing ₹1,000–₹2,000 per month in Emergency SIP', done: false },
+                ]},
+                { month: 'November 2025', theme: 'Job Offer-Oriented Strategy', tasks: [
+                    { text: 'Target screening calls → 3–5 technical interviews', done: false },
+                    { text: 'Prepare readiness packet (offer template, resignation draft)', done: false },
+                    { text: 'Build 2-month survival runway', done: false },
+                ]},
+                { month: 'December 2025', theme: 'Achieve Short-Term Finish Line', tasks: [
+                    { text: 'Accept offer and join new role', done: false },
+                    { text: 'Close or prepay extra loan with bonus/windfall', done: false },
+                    { text: 'Plan 2026 goals (new role, new stack)', done: false },
+                    { text: 'Celebrate wins!', done: false },
+                ]},
+            ];
+
+            const carSaleChecklistData = [
+                { text: 'Request official foreclosure letter from Toyota Financial', done: false },
+                { text: 'Collect all documents (RC, Insurance, PUC, Service Records)', done: false },
+                { text: 'Get quotes from multiple platforms (Cars24, Spinny, etc.)', done: false },
+                { text: 'Finalize buyer and agree on price', done: false },
+                { text: 'Coordinate with buyer to pay off the loan directly', done: false },
+                { text: 'Complete RC transfer process', done: false },
+                { text: 'Receive loan closure confirmation & NOC from bank', done: false },
+                { text: 'Receive balance payment from buyer', done: false },
+            ];
+
+            const loanData = [
+                { name: 'Toyota Financial (Car Loan)', principal: '₹3,94,558', status: 'Active' },
+                { name: 'L&T Finance (Personal Loan)', principal: '[Enter Amount]', status: 'Active' },
+            ];
+            
+            let jobApplications = [];
+
+            // --- LOCAL STORAGE ---
+            function saveData() {
+                const appData = {
+                    goals: goalsData,
+                    monthlyPlan: monthlyPlanData,
+                    carSaleChecklist: carSaleChecklistData,
+                    loans: loanData,
+                    emergencyFund: document.getElementById('emergency-fund-current').innerText,
+                    sipStarted: document.getElementById('sip-check').checked,
+                    jobs: jobApplications
+                };
+                localStorage.setItem('careerPlanTracker', JSON.stringify(appData));
+            }
+
+            function loadData() {
+                const savedData = JSON.parse(localStorage.getItem('careerPlanTracker'));
+                if (savedData) {
+                    Object.assign(goalsData, savedData.goals);
+                    Object.assign(monthlyPlanData, savedData.monthlyPlan);
+                    Object.assign(carSaleChecklistData, savedData.carSaleChecklist);
+                    Object.assign(loanData, savedData.loans);
+                    document.getElementById('emergency-fund-current').innerText = savedData.emergencyFund || '0';
+                    document.getElementById('emergency-fund-input').value = savedData.emergencyFund || '';
+                    document.getElementById('sip-check').checked = savedData.sipStarted || false;
+                    jobApplications = savedData.jobs || [];
+                }
+            }
+
+            // --- RENDER FUNCTIONS ---
+            function renderGoals() {
+                const tbody = document.getElementById('goals-table-body');
+                tbody.innerHTML = '';
+                let completed = 0;
+                let inProgress = 0;
+                goalsData.forEach(goal => {
+                    const row = document.createElement('tr');
+                    const statusClass = `status-${goal.status.toLowerCase().replace(' ', '')}`;
+                    row.innerHTML = `
+                        <td class="p-3 table-cell">${goal.category}</td>
+                        <td class="p-3 table-cell">${goal.goal}</td>
+                        <td class="p-3 table-cell">${goal.target}</td>
+                        <td class="p-3 table-cell">
+                            <select class="goal-status-select p-1 rounded border border-gray-300 bg-transparent" data-goal="${goal.goal}">
+                                <option value="To Do" ${goal.status === 'To Do' ? 'selected' : ''}>To Do</option>
+                                <option value="In Progress" ${goal.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                                <option value="Done" ${goal.status === 'Done' ? 'selected' : ''}>Done</option>
+                            </select>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                    if (goal.status === 'Done') completed++;
+                    if (goal.status === 'In Progress') inProgress++;
+                });
+                document.getElementById('goals-completed-count').innerText = `${completed}/${goalsData.length}`;
+                document.getElementById('goals-inprogress-count').innerText = `${inProgress}/${goalsData.length}`;
+
+                document.querySelectorAll('.goal-status-select').forEach(select => {
+                    select.addEventListener('change', (e) => {
+                        const goalToUpdate = goalsData.find(g => g.goal === e.target.dataset.goal);
+                        goalToUpdate.status = e.target.value;
+                        renderAll();
+                        saveData();
+                    });
+                });
+            }
+
+            function renderMonthlyPlan() {
+                const container = document.getElementById('monthly-plan-container');
+                container.innerHTML = '';
+                monthlyPlanData.forEach((monthData, monthIndex) => {
+                    const card = document.createElement('div');
+                    card.className = 'card p-6';
+                    let tasksHtml = '<div class="space-y-3 mt-4">';
+                    monthData.tasks.forEach((task, taskIndex) => {
+                        tasksHtml += `
+                            <div class="flex items-center">
+                                <input type="checkbox" id="task-${monthIndex}-${taskIndex}" class="mr-3 monthly-task-check" ${task.done ? 'checked' : ''} data-month="${monthIndex}" data-task="${taskIndex}">
+                                <label for="task-${monthIndex}-${taskIndex}" class="text-gray-800">${task.text}</label>
+                            </div>
+                        `;
+                    });
+                    tasksHtml += '</div>';
+                    card.innerHTML = `
+                        <h3 class="text-lg font-semibold text-indigo-700">${monthData.month}</h3>
+                        <p class="text-sm text-gray-500">${monthData.theme}</p>
+                        ${tasksHtml}
+                    `;
+                    container.appendChild(card);
+                });
+
+                document.querySelectorAll('.monthly-task-check').forEach(checkbox => {
+                    checkbox.addEventListener('change', (e) => {
+                        const monthIndex = e.target.dataset.month;
+                        const taskIndex = e.target.dataset.task;
+                        monthlyPlanData[monthIndex].tasks[taskIndex].done = e.target.checked;
+                        renderAll();
+                        saveData();
+                    });
+                });
+            }
+
+            function renderCarSaleChecklist() {
+                const container = document.getElementById('car-sale-checklist');
+                container.innerHTML = '';
+                carSaleChecklistData.forEach((item, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'flex items-center bg-gray-50 p-3 rounded-lg';
+                    div.innerHTML = `
+                        <input type="checkbox" id="car-check-${index}" class="mr-3 car-sale-check" ${item.done ? 'checked' : ''} data-index="${index}">
+                        <label for="car-check-${index}" class="text-gray-800">${item.text}</label>
+                    `;
+                    container.appendChild(div);
+                });
+
+                 document.querySelectorAll('.car-sale-check').forEach(checkbox => {
+                    checkbox.addEventListener('change', (e) => {
+                        const index = e.target.dataset.index;
+                        carSaleChecklistData[index].done = e.target.checked;
+                        saveData();
+                    });
+                });
+            }
+
+            function renderLoans() {
+                const tbody = document.getElementById('loan-table-body');
+                tbody.innerHTML = '';
+                loanData.forEach(loan => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="p-3 table-cell">${loan.name}</td>
+                        <td class="p-3 table-cell">${loan.principal}</td>
+                        <td class="p-3 table-cell">
+                             <select class="loan-status-select p-1 rounded border border-gray-300 bg-transparent" data-loan="${loan.name}">
+                                <option value="Active" ${loan.status === 'Active' ? 'selected' : ''}>Active</option>
+                                <option value="Closed" ${loan.status === 'Closed' ? 'selected' : ''}>Closed</option>
+                            </select>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                 document.querySelectorAll('.loan-status-select').forEach(select => {
+                    select.addEventListener('change', (e) => {
+                        const loanToUpdate = loanData.find(l => l.name === e.target.dataset.loan);
+                        loanToUpdate.status = e.target.value;
+                        saveData();
+                    });
+                });
+            }
+            
+            function renderJobApplications() {
+                const tbody = document.getElementById('job-application-body');
+                tbody.innerHTML = '';
+                if (jobApplications.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center p-4 text-gray-500">No applications added yet.</td></tr>`;
+                    return;
+                }
+                jobApplications.forEach((app, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="p-3 table-cell">${app.date}</td>
+                        <td class="p-3 table-cell">${app.company}</td>
+                        <td class="p-3 table-cell">${app.role}</td>
+                        <td class="p-3 table-cell">
+                            <select class="job-status-select p-1 rounded border border-gray-300 bg-transparent" data-index="${index}">
+                                <option value="Applied" ${app.status === 'Applied' ? 'selected' : ''}>Applied</option>
+                                <option value="Interviewing" ${app.status === 'Interviewing' ? 'selected' : ''}>Interviewing</option>
+                                <option value="Offer" ${app.status === 'Offer' ? 'selected' : ''}>Offer</option>
+                                <option value="Rejected" ${app.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+                            </select>
+                        </td>
+                        <td class="p-3 table-cell text-center">
+                            <button class="text-red-500 hover:text-red-700 delete-job-btn" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                document.querySelectorAll('.job-status-select').forEach(select => {
+                    select.addEventListener('change', (e) => {
+                        jobApplications[e.target.dataset.index].status = e.target.value;
+                        saveData();
+                    });
+                });
+
+                document.querySelectorAll('.delete-job-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = e.currentTarget.dataset.index;
+                        jobApplications.splice(index, 1);
+                        renderJobApplications();
+                        saveData();
+                    });
+                });
+            }
+
+            function updateDashboard() {
+                // Overall Progress
+                const allTasks = monthlyPlanData.flatMap(m => m.tasks);
+                const completedTasks = allTasks.filter(t => t.done).length;
+                const totalTasks = allTasks.length;
+                const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+                const progressBar = document.getElementById('overall-progress-bar');
+                progressBar.style.width = `${progress}%`;
+                progressBar.innerText = `${progress}%`;
+
+                // Countdown
+                const endOfYear = new Date('2025-12-31');
+                const now = new Date();
+                const diffTime = Math.abs(endOfYear - now);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                document.getElementById('countdown').innerText = diffDays;
+
+                // Critical Tasks
+                const criticalTasksContainer = document.getElementById('critical-tasks');
+                criticalTasksContainer.innerHTML = '';
+                const nextTasks = allTasks.filter(t => !t.done).slice(0, 3);
+                if (nextTasks.length > 0) {
+                    nextTasks.forEach(task => {
+                        const taskEl = document.createElement('div');
+                        taskEl.className = 'bg-gray-100 p-3 rounded-lg flex items-center';
+                        taskEl.innerHTML = `<i class="fas fa-arrow-right text-indigo-500 mr-3"></i><span>${task.text}</span>`;
+                        criticalTasksContainer.appendChild(taskEl);
+                    });
+                } else {
+                    criticalTasksContainer.innerHTML = `<div class="bg-green-100 text-green-800 p-3 rounded-lg flex items-center"><i class="fas fa-check-circle mr-3"></i><span>All tasks completed! Great job!</span></div>`;
+                }
+            }
+
+            // --- EVENT LISTENERS ---
+            // Tab switching
+            const tabNav = document.getElementById('tab-nav');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabNav.addEventListener('click', (e) => {
+                const targetButton = e.target.closest('button');
+                if (!targetButton) return;
+
+                document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+                targetButton.classList.add('active');
+
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(targetButton.dataset.tab).classList.add('active');
+            });
+
+            // Update Emergency Fund
+            document.getElementById('update-fund-btn').addEventListener('click', () => {
+                const amount = document.getElementById('emergency-fund-input').value;
+                if (amount && !isNaN(amount)) {
+                    document.getElementById('emergency-fund-current').innerText = parseFloat(amount).toLocaleString('en-IN');
+                    saveData();
+                }
+            });
+            
+            // Add Job Application
+            document.getElementById('add-application-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const company = document.getElementById('company-name').value;
+                const role = document.getElementById('role-name').value;
+                const newApp = {
+                    date: new Date().toLocaleDateString('en-CA'), // YYYY-MM-DD
+                    company,
+                    role,
+                    status: 'Applied'
+                };
+                jobApplications.unshift(newApp);
+                renderJobApplications();
+                saveData();
+                e.target.reset();
+            });
+
+            // --- INITIALIZATION ---
+            function renderAll() {
+                renderGoals();
+                renderMonthlyPlan();
+                renderCarSaleChecklist();
+                renderLoans();
+                renderJobApplications();
+                updateDashboard();
+            }
+
+            loadData();
+            renderAll();
+        });
+    </script>
+</body>
+</html>
